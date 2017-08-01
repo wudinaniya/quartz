@@ -1,0 +1,455 @@
+SQL> --子查询,将一个selec查询到的结果作为另外一个select的参数
+SQL> --查询工资比scott高的人
+SQL> --首先得知道scott工资是多少
+SQL> select sal from emp where ename=SCOTT;
+select sal from emp where ename=SCOTT
+                                *
+第 1 行出现错误: 
+ORA-00904: "SCOTT": 标识符无效 
+
+
+SQL> select sal from emp where ename='SCOTT';
+
+       SAL                                                                      
+----------                                                                      
+      3000                                                                      
+
+SQL> --查询工资比3000高的
+SQL> select ename 名字,sal 工资 from emp where sal > 3000;
+
+名字                       工资                                                 
+-------------------- ----------                                                 
+KING                       5000                                                 
+
+SQL> select ename 名字,sal 工资 from emp where sal > (select sal from emp where ename='SCOTT');
+
+名字                       工资                                                 
+-------------------- ----------                                                 
+KING                       5000                                                 
+
+SQL> --子查询解决的问题
+SQL> --不能由一条sql语句直接获取到结果的,一条sql语句的查询条件需要用另外一条sql语句查询出来
+SQL> /*
+SQL> 编写子查询最好注意下编写风格,不要一行直接写完
+SQL> 子查询的select需要写到括号中
+SQL> 子查询 不能写在 group by 后面,因为group by需要的是列的名字,而子查询得到的是列的值
+SQL> 子查询可以写在 where,having from ,select 也可以跟子查询
+SQL> 主查询和子查询可以查询不同的表,只要是子查询返回的结果是主查询要的结果就行
+SQL> 执行顺序,先执行子查询,再执行主查询
+SQL> 单行子查询中只能使用单行函数,多行子查询中只能使用多行函数
+SQL> 主要演示 from后的子查询
+SQL> 子查询中一般不要使用排序,top-n除外
+SQL> 子查询中如果出现null值
+SQL> */
+SQL> select ename,sal,job  from emp;
+
+ENAME                       SAL JOB                                             
+-------------------- ---------- ------------------                              
+SMITH                       800 CLERK                                           
+ALLEN                      1600 SALESMAN                                        
+WARD                       1250 SALESMAN                                        
+JONES                      2975 MANAGER                                         
+MARTIN                     1250 SALESMAN                                        
+BLAKE                      2850 MANAGER                                         
+CLARK                      2450 MANAGER                                         
+SCOTT                      3000 ANALYST                                         
+KING                       5000 PRESIDENT                                       
+TURNER                     1500 SALESMAN                                        
+ADAMS                      1100 CLERK                                           
+
+ENAME                       SAL JOB                                             
+-------------------- ---------- ------------------                              
+JAMES                       950 CLERK                                           
+FORD                       3000 ANALYST                                         
+MILLER                     1300 CLERK                                           
+
+已选择14行。
+
+SQL> select ename,sal,(select job from emp where empno=7521) from emp;
+
+ENAME                       SAL (SELECTJOBFROMEMPW                              
+-------------------- ---------- ------------------                              
+SMITH                       800 SALESMAN                                        
+ALLEN                      1600 SALESMAN                                        
+WARD                       1250 SALESMAN                                        
+JONES                      2975 SALESMAN                                        
+MARTIN                     1250 SALESMAN                                        
+BLAKE                      2850 SALESMAN                                        
+CLARK                      2450 SALESMAN                                        
+SCOTT                      3000 SALESMAN                                        
+KING                       5000 SALESMAN                                        
+TURNER                     1500 SALESMAN                                        
+ADAMS                      1100 SALESMAN                                        
+
+ENAME                       SAL (SELECTJOBFROMEMPW                              
+-------------------- ---------- ------------------                              
+JAMES                       950 SALESMAN                                        
+FORD                       3000 SALESMAN                                        
+MILLER                     1300 SALESMAN                                        
+
+已选择14行。
+
+SQL> select * from (select empno,ename,sal from emp);
+
+     EMPNO ENAME                       SAL                                      
+---------- -------------------- ----------                                      
+      7369 SMITH                       800                                      
+      7499 ALLEN                      1600                                      
+      7521 WARD                       1250                                      
+      7566 JONES                      2975                                      
+      7654 MARTIN                     1250                                      
+      7698 BLAKE                      2850                                      
+      7782 CLARK                      2450                                      
+      7788 SCOTT                      3000                                      
+      7839 KING                       5000                                      
+      7844 TURNER                     1500                                      
+      7876 ADAMS                      1100                                      
+
+     EMPNO ENAME                       SAL                                      
+---------- -------------------- ----------                                      
+      7900 JAMES                       950                                      
+      7902 FORD                       3000                                      
+      7934 MILLER                     1300                                      
+
+已选择14行。
+
+SQL> select ename from (select empno,ename,sal from emp);
+
+ENAME                                                                           
+--------------------                                                            
+SMITH                                                                           
+ALLEN                                                                           
+WARD                                                                            
+JONES                                                                           
+MARTIN                                                                          
+BLAKE                                                                           
+CLARK                                                                           
+SCOTT                                                                           
+KING                                                                            
+TURNER                                                                          
+ADAMS                                                                           
+
+ENAME                                                                           
+--------------------                                                            
+JAMES                                                                           
+FORD                                                                            
+MILLER                                                                          
+
+已选择14行。
+
+SQL> --其实 select 返回的数据是一个虚拟表数据
+SQL> --伪操作 查询员工的编号,姓名,月薪,年薪
+SQL> select * from (select empno,ename,sal,sal*12 from emp);
+
+     EMPNO ENAME                       SAL     SAL*12                           
+---------- -------------------- ---------- ----------                           
+      7369 SMITH                       800       9600                           
+      7499 ALLEN                      1600      19200                           
+      7521 WARD                       1250      15000                           
+      7566 JONES                      2975      35700                           
+      7654 MARTIN                     1250      15000                           
+      7698 BLAKE                      2850      34200                           
+      7782 CLARK                      2450      29400                           
+      7788 SCOTT                      3000      36000                           
+      7839 KING                       5000      60000                           
+      7844 TURNER                     1500      18000                           
+      7876 ADAMS                      1100      13200                           
+
+     EMPNO ENAME                       SAL     SAL*12                           
+---------- -------------------- ---------- ----------                           
+      7900 JAMES                       950      11400                           
+      7902 FORD                       3000      36000                           
+      7934 MILLER                     1300      15600                           
+
+已选择14行。
+
+SQL> --查询部门名字为sales的员工
+SQL> select * from emp where deptno =(select deptno from dept where dname='SALES');
+
+     EMPNO ENAME                JOB                       MGR HIREDATE          
+---------- -------------------- ------------------ ---------- --------------    
+       SAL       COMM     DEPTNO                                                
+---------- ---------- ----------                                                
+      7499 ALLEN                SALESMAN                 7698 20-2月 -81        
+      1600        300         30                                                
+                                                                                
+      7521 WARD                 SALESMAN                 7698 22-2月 -81        
+      1250        500         30                                                
+                                                                                
+      7654 MARTIN               SALESMAN                 7698 28-9月 -81        
+      1250       1400         30                                                
+                                                                                
+
+     EMPNO ENAME                JOB                       MGR HIREDATE          
+---------- -------------------- ------------------ ---------- --------------    
+       SAL       COMM     DEPTNO                                                
+---------- ---------- ----------                                                
+      7698 BLAKE                MANAGER                  7839 01-5月 -81        
+      2850                    30                                                
+                                                                                
+      7844 TURNER               SALESMAN                 7698 08-9月 -81        
+      1500          0         30                                                
+                                                                                
+      7900 JAMES                CLERK                    7698 03-12月-81        
+       950                    30                                                
+                                                                                
+
+已选择6行。
+
+SQL> set linesize =250
+SP2-0268: linesize 选项的编号无效
+SQL> set linesize 250
+SQL> col ename format 19
+SP2-0246: 非法的 FORMAT 字符串"19"
+SQL> col ename format a8
+SQL> col sal format 9999
+SQL> /
+
+     EMPNO ENAME    JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                              
+---------- -------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                              
+      7499 ALLEN    SALESMAN                 7698 20-2月 -81      1600        300         30                                                                                                                                                              
+      7521 WARD     SALESMAN                 7698 22-2月 -81      1250        500         30                                                                                                                                                              
+      7654 MARTIN   SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                                              
+      7698 BLAKE    MANAGER                  7839 01-5月 -81      2850                    30                                                                                                                                                              
+      7844 TURNER   SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                                              
+      7900 JAMES    CLERK                    7698 03-12月-81       950                    30                                                                                                                                                              
+
+已选择6行。
+
+SQL> select e.* from emp e,dept d where e.deptno=d.deptno and d.dname='SALES';
+
+     EMPNO ENAME    JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                              
+---------- -------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                              
+      7521 WARD     SALESMAN                 7698 22-2月 -81      1250        500         30                                                                                                                                                              
+      7844 TURNER   SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                                              
+      7499 ALLEN    SALESMAN                 7698 20-2月 -81      1600        300         30                                                                                                                                                              
+      7900 JAMES    CLERK                    7698 03-12月-81       950                    30                                                                                                                                                              
+      7698 BLAKE    MANAGER                  7839 01-5月 -81      2850                    30                                                                                                                                                              
+      7654 MARTIN   SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                                              
+
+已选择6行。
+
+SQL> --sql优化 在子查询和多表查询都能完成同样功能的情况下,使用多表查询,它的执行效率比较高
+SQL> --in子查询
+SQL> --查询部门名字是SALES和RESEARCH的员工信息
+SQL> select * from emp where deptno in(select deptno from dept where dname='SALES' or dname='RESEARCH');
+
+     EMPNO ENAME    JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                              
+---------- -------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                              
+      7566 JONES    MANAGER                  7839 02-4月 -81      2975                    20                                                                                                                                                              
+      7902 FORD     ANALYST                  7566 03-12月-81      3000                    20                                                                                                                                                              
+      7876 ADAMS    CLERK                    7788 23-5月 -87      1100                    20                                                                                                                                                              
+      7369 SMITH    CLERK                    7902 17-12月-80       800                    20                                                                                                                                                              
+      7788 SCOTT    ANALYST                  7566 19-4月 -87      3000                    20                                                                                                                                                              
+      7521 WARD     SALESMAN                 7698 22-2月 -81      1250        500         30                                                                                                                                                              
+      7844 TURNER   SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                                              
+      7499 ALLEN    SALESMAN                 7698 20-2月 -81      1600        300         30                                                                                                                                                              
+      7900 JAMES    CLERK                    7698 03-12月-81       950                    30                                                                                                                                                              
+      7698 BLAKE    MANAGER                  7839 01-5月 -81      2850                    30                                                                                                                                                              
+      7654 MARTIN   SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                                              
+
+已选择11行。
+
+SQL> --any和子查询结果集合中的任意一个数据比较
+SQL> --查询工资 比30号部门中任意一个员工高的员工信息
+SQL> select * from emp where sal  > any(select sal from emp where deptno =30);
+
+     EMPNO ENAME    JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                              
+---------- -------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                              
+      7839 KING     PRESIDENT                     17-11月-81      5000                    10                                                                                                                                                              
+      7902 FORD     ANALYST                  7566 03-12月-81      3000                    20                                                                                                                                                              
+      7788 SCOTT    ANALYST                  7566 19-4月 -87      3000                    20                                                                                                                                                              
+      7566 JONES    MANAGER                  7839 02-4月 -81      2975                    20                                                                                                                                                              
+      7698 BLAKE    MANAGER                  7839 01-5月 -81      2850                    30                                                                                                                                                              
+      7782 CLARK    MANAGER                  7839 09-6月 -81      2450                    10                                                                                                                                                              
+      7499 ALLEN    SALESMAN                 7698 20-2月 -81      1600        300         30                                                                                                                                                              
+      7844 TURNER   SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                                              
+      7934 MILLER   CLERK                    7782 23-1月 -82      1300                    10                                                                                                                                                              
+      7521 WARD     SALESMAN                 7698 22-2月 -81      1250        500         30                                                                                                                                                              
+      7654 MARTIN   SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                                              
+
+     EMPNO ENAME    JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                              
+---------- -------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                              
+      7876 ADAMS    CLERK                    7788 23-5月 -87      1100                    20                                                                                                                                                              
+
+已选择12行。
+
+SQL> select * from emp where sal > (select min(sal) from emp where deptno=30);
+
+     EMPNO ENAME    JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                              
+---------- -------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                              
+      7499 ALLEN    SALESMAN                 7698 20-2月 -81      1600        300         30                                                                                                                                                              
+      7521 WARD     SALESMAN                 7698 22-2月 -81      1250        500         30                                                                                                                                                              
+      7566 JONES    MANAGER                  7839 02-4月 -81      2975                    20                                                                                                                                                              
+      7654 MARTIN   SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                                              
+      7698 BLAKE    MANAGER                  7839 01-5月 -81      2850                    30                                                                                                                                                              
+      7782 CLARK    MANAGER                  7839 09-6月 -81      2450                    10                                                                                                                                                              
+      7788 SCOTT    ANALYST                  7566 19-4月 -87      3000                    20                                                                                                                                                              
+      7839 KING     PRESIDENT                     17-11月-81      5000                    10                                                                                                                                                              
+      7844 TURNER   SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                                              
+      7876 ADAMS    CLERK                    7788 23-5月 -87      1100                    20                                                                                                                                                              
+      7902 FORD     ANALYST                  7566 03-12月-81      3000                    20                                                                                                                                                              
+
+     EMPNO ENAME    JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                              
+---------- -------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                              
+      7934 MILLER   CLERK                    7782 23-1月 -82      1300                    10                                                                                                                                                              
+
+已选择12行。
+
+SQL> select *
+  2  	from emp
+  3  		where sal >
+  4  			all (select sal
+  5  					from emp
+  6  						where deptno =30);
+
+     EMPNO ENAME    JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                              
+---------- -------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                              
+      7566 JONES    MANAGER                  7839 02-4月 -81      2975                    20                                                                                                                                                              
+      7788 SCOTT    ANALYST                  7566 19-4月 -87      3000                    20                                                                                                                                                              
+      7902 FORD     ANALYST                  7566 03-12月-81      3000                    20                                                                                                                                                              
+      7839 KING     PRESIDENT                     17-11月-81      5000                    10                                                                                                                                                              
+
+SQL> select * from emp where sal > (select max(sal) from emp where deptno =30);
+
+     EMPNO ENAME    JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                              
+---------- -------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                              
+      7566 JONES    MANAGER                  7839 02-4月 -81      2975                    20                                                                                                                                                              
+      7788 SCOTT    ANALYST                  7566 19-4月 -87      3000                    20                                                                                                                                                              
+      7839 KING     PRESIDENT                     17-11月-81      5000                    10                                                                                                                                                              
+      7902 FORD     ANALYST                  7566 03-12月-81      3000                    20                                                                                                                                                              
+
+SQL> --子查询中返回null
+SQL> --查询不是上司的员工
+SQL> select * from emp;
+
+     EMPNO ENAME    JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                              
+---------- -------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                              
+      7369 SMITH    CLERK                    7902 17-12月-80       800                    20                                                                                                                                                              
+      7499 ALLEN    SALESMAN                 7698 20-2月 -81      1600        300         30                                                                                                                                                              
+      7521 WARD     SALESMAN                 7698 22-2月 -81      1250        500         30                                                                                                                                                              
+      7566 JONES    MANAGER                  7839 02-4月 -81      2975                    20                                                                                                                                                              
+      7654 MARTIN   SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                                              
+      7698 BLAKE    MANAGER                  7839 01-5月 -81      2850                    30                                                                                                                                                              
+      7782 CLARK    MANAGER                  7839 09-6月 -81      2450                    10                                                                                                                                                              
+      7788 SCOTT    ANALYST                  7566 19-4月 -87      3000                    20                                                                                                                                                              
+      7839 KING     PRESIDENT                     17-11月-81      5000                    10                                                                                                                                                              
+      7844 TURNER   SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                                              
+      7876 ADAMS    CLERK                    7788 23-5月 -87      1100                    20                                                                                                                                                              
+
+     EMPNO ENAME    JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                              
+---------- -------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                              
+      7900 JAMES    CLERK                    7698 03-12月-81       950                    30                                                                                                                                                              
+      7902 FORD     ANALYST                  7566 03-12月-81      3000                    20                                                                                                                                                              
+      7934 MILLER   CLERK                    7782 23-1月 -82      1300                    10                                                                                                                                                              
+
+已选择14行。
+
+SQL> select * from emp where empno not in (select mgr from emp);
+
+未选定行
+
+SQL> select * from emp where empno in (select mgr from emp);
+
+     EMPNO ENAME    JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                              
+---------- -------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                              
+      7566 JONES    MANAGER                  7839 02-4月 -81      2975                    20                                                                                                                                                              
+      7698 BLAKE    MANAGER                  7839 01-5月 -81      2850                    30                                                                                                                                                              
+      7782 CLARK    MANAGER                  7839 09-6月 -81      2450                    10                                                                                                                                                              
+      7788 SCOTT    ANALYST                  7566 19-4月 -87      3000                    20                                                                                                                                                              
+      7839 KING     PRESIDENT                     17-11月-81      5000                    10                                                                                                                                                              
+      7902 FORD     ANALYST                  7566 03-12月-81      3000                    20                                                                                                                                                              
+
+已选择6行。
+
+SQL> select empno from emp where empno in (select mgr from emp);
+
+     EMPNO                                                                                                                                                                                                                                                
+----------                                                                                                                                                                                                                                                
+      7566                                                                                                                                                                                                                                                
+      7698                                                                                                                                                                                                                                                
+      7782                                                                                                                                                                                                                                                
+      7788                                                                                                                                                                                                                                                
+      7839                                                                                                                                                                                                                                                
+      7902                                                                                                                                                                                                                                                
+
+已选择6行。
+
+SQL> select * from emp where empno not in (select empno from emp where empno in (select mgr from emp));
+
+     EMPNO ENAME    JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                              
+---------- -------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                              
+      7369 SMITH    CLERK                    7902 17-12月-80       800                    20                                                                                                                                                              
+      7499 ALLEN    SALESMAN                 7698 20-2月 -81      1600        300         30                                                                                                                                                              
+      7521 WARD     SALESMAN                 7698 22-2月 -81      1250        500         30                                                                                                                                                              
+      7654 MARTIN   SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                                              
+      7844 TURNER   SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                                              
+      7876 ADAMS    CLERK                    7788 23-5月 -87      1100                    20                                                                                                                                                              
+      7900 JAMES    CLERK                    7698 03-12月-81       950                    30                                                                                                                                                              
+      7934 MILLER   CLERK                    7782 23-1月 -82      1300                    10                                                                                                                                                              
+
+已选择8行。
+
+SQL> select mgr from emp;
+
+       MGR                                                                                                                                                                                                                                                
+----------                                                                                                                                                                                                                                                
+      7902                                                                                                                                                                                                                                                
+      7698                                                                                                                                                                                                                                                
+      7698                                                                                                                                                                                                                                                
+      7839                                                                                                                                                                                                                                                
+      7698                                                                                                                                                                                                                                                
+      7839                                                                                                                                                                                                                                                
+      7839                                                                                                                                                                                                                                                
+      7566                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                          
+      7698                                                                                                                                                                                                                                                
+      7788                                                                                                                                                                                                                                                
+
+       MGR                                                                                                                                                                                                                                                
+----------                                                                                                                                                                                                                                                
+      7698                                                                                                                                                                                                                                                
+      7566                                                                                                                                                                                                                                                
+      7782                                                                                                                                                                                                                                                
+
+已选择14行。
+
+SQL> select mgr from emp where mgr is not null;
+
+       MGR                                                                                                                                                                                                                                                
+----------                                                                                                                                                                                                                                                
+      7902                                                                                                                                                                                                                                                
+      7698                                                                                                                                                                                                                                                
+      7698                                                                                                                                                                                                                                                
+      7839                                                                                                                                                                                                                                                
+      7698                                                                                                                                                                                                                                                
+      7839                                                                                                                                                                                                                                                
+      7839                                                                                                                                                                                                                                                
+      7566                                                                                                                                                                                                                                                
+      7698                                                                                                                                                                                                                                                
+      7788                                                                                                                                                                                                                                                
+      7698                                                                                                                                                                                                                                                
+
+       MGR                                                                                                                                                                                                                                                
+----------                                                                                                                                                                                                                                                
+      7566                                                                                                                                                                                                                                                
+      7782                                                                                                                                                                                                                                                
+
+已选择13行。
+
+SQL> select * from emp where empno not in (select mgr from emp where mgr is not null);
+
+     EMPNO ENAME    JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                              
+---------- -------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                              
+      7369 SMITH    CLERK                    7902 17-12月-80       800                    20                                                                                                                                                              
+      7499 ALLEN    SALESMAN                 7698 20-2月 -81      1600        300         30                                                                                                                                                              
+      7521 WARD     SALESMAN                 7698 22-2月 -81      1250        500         30                                                                                                                                                              
+      7654 MARTIN   SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                                              
+      7844 TURNER   SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                                              
+      7876 ADAMS    CLERK                    7788 23-5月 -87      1100                    20                                                                                                                                                              
+      7900 JAMES    CLERK                    7698 03-12月-81       950                    30                                                                                                                                                              
+      7934 MILLER   CLERK                    7782 23-1月 -82      1300                    10                                                                                                                                                              
+
+已选择8行。
+
+SQL> spool off
