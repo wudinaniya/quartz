@@ -1,0 +1,310 @@
+SQL> /*
+SQL> 
+SQL> sql语句的类型
+SQL> dml data manipulation language 数据操作语言  insert delete update   select(dql)
+SQL> ddl  data definition language 数据定义语言 create table, alter  drop ......
+SQL> dcl data control language 数据控制语言 grant 授权  revoke 移除权限
+SQL> --insert 插入数据
+SQL> insert into emp(empno,enmae,sal,deptno) values(1111,'diyijian',1,10);
+SQL> */
+SQL> insert into emp(empno,enmae,sal,deptno) values(1111,'diyijian',1,10);
+insert into emp(empno,enmae,sal,deptno) values(1111,'diyijian',1,10)
+                      *
+第 1 行出现错误: 
+ORA-00904: "ENMAE": 标识符无效 
+
+
+
+SQL> insert into emp(empno,ename,sal,deptno) values(1111,'diyijian',1,10);
+
+已创建 1 行。
+
+
+SQL> select * from emp;
+
+     EMPNO ENAME                JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                  
+---------- -------------------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                  
+      1111 diyijian                                                              1                    10                                                                                                                                                  
+      7369 SMITH                CLERK                    7902 17-12月-80       800                    20                                                                                                                                                  
+      7499 ALLEN                SALESMAN                 7698 20-2月 -81      1600        300         30                                                                                                                                                  
+      7521 WARD                 SALESMAN                 7698 22-2月 -81      1250        500         30                                                                                                                                                  
+      7566 JONES                MANAGER                  7839 02-4月 -81      2975                    20                                                                                                                                                  
+      7654 MARTIN               SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                                  
+      7698 BLAKE                MANAGER                  7839 01-5月 -81      2850                    30                                                                                                                                                  
+      7782 CLARK                MANAGER                  7839 09-6月 -81      2450                    10                                                                                                                                                  
+      7788 SCOTT                ANALYST                  7566 19-4月 -87      3000                    20                                                                                                                                                  
+      7839 KING                 PRESIDENT                     17-11月-81      5000                    10                                                                                                                                                  
+      7844 TURNER               SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                                  
+
+     EMPNO ENAME                JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                  
+---------- -------------------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                  
+      7876 ADAMS                CLERK                    7788 23-5月 -87      1100                    20                                                                                                                                                  
+      7900 JAMES                CLERK                    7698 03-12月-81       950                    30                                                                                                                                                  
+      7902 FORD                 ANALYST                  7566 03-12月-81      3000                    20                                                                                                                                                  
+      7934 MILLER               CLERK                    7782 23-1月 -82      1300                    10                                                                                                                                                  
+
+已选择15行。
+
+
+SQL> --jdbc  preparedstatment   insert into emp(empno,ename,sal,deptno) value(?,?,?,?)
+SQL>  insert into emp(empno,ename,sal,deptno) values(&empno,&ename,&sal,&deptno);
+输入 empno 的值:  1001
+输入 ename 的值:  'wangguoying'
+输入 sal 的值:  1
+输入 deptno 的值:  10
+原值    1:  insert into emp(empno,ename,sal,deptno) values(&empno,&ename,&sal,&deptno)
+新值    1:  insert into emp(empno,ename,sal,deptno) values(1001,'wangguoying',1,10)
+ insert into emp(empno,ename,sal,deptno) values(1001,'wangguoying',1,10)
+                                                     *
+第 1 行出现错误: 
+ORA-12899: 列 "SCOTT"."EMP"."ENAME" 的值太大 (实际值: 11, 最大值: 10) 
+
+
+已用时间:  00: 00: 00.05
+SQL>  insert into emp(empno,ename,sal,deptno) values(&empno,&ename,&sal,&deptno);
+输入 empno 的值:  1001
+输入 ename 的值:  'wangwang'
+输入 sal 的值:  1
+输入 deptno 的值:  10
+原值    1:  insert into emp(empno,ename,sal,deptno) values(&empno,&ename,&sal,&deptno)
+新值    1:  insert into emp(empno,ename,sal,deptno) values(1001,'wangwang',1,10)
+
+已创建 1 行。
+
+
+SQL> select * from emp;
+
+     EMPNO ENAME                JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                  
+---------- -------------------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                  
+      1111 diyijian                                                              1                    10                                                                                                                                                  
+      1001 wangwang                                                              1                    10                                                                                                                                                  
+      7369 SMITH                CLERK                    7902 17-12月-80       800                    20                                                                                                                                                  
+      7499 ALLEN                SALESMAN                 7698 20-2月 -81      1600        300         30                                                                                                                                                  
+      7521 WARD                 SALESMAN                 7698 22-2月 -81      1250        500         30                                                                                                                                                  
+      7566 JONES                MANAGER                  7839 02-4月 -81      2975                    20                                                                                                                                                  
+      7654 MARTIN               SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                                  
+      7698 BLAKE                MANAGER                  7839 01-5月 -81      2850                    30                                                                                                                                                  
+      7782 CLARK                MANAGER                  7839 09-6月 -81      2450                    10                                                                                                                                                  
+      7788 SCOTT                ANALYST                  7566 19-4月 -87      3000                    20                                                                                                                                                  
+      7839 KING                 PRESIDENT                     17-11月-81      5000                    10                                                                                                                                                  
+
+     EMPNO ENAME                JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                  
+---------- -------------------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                  
+      7844 TURNER               SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                                  
+      7876 ADAMS                CLERK                    7788 23-5月 -87      1100                    20                                                                                                                                                  
+      7900 JAMES                CLERK                    7698 03-12月-81       950                    30                                                                                                                                                  
+      7902 FORD                 ANALYST                  7566 03-12月-81      3000                    20                                                                                                                                                  
+      7934 MILLER               CLERK                    7782 23-1月 -82      1300                    10                                                                                                                                                  
+
+已选择16行。
+
+已用时间:  00: 00: 00.10
+SQL> select empno,ename,&a from emp;
+输入 a 的值:  sal
+原值    1: select empno,ename,&a from emp
+新值    1: select empno,ename,sal from emp
+
+     EMPNO ENAME                  SAL                                                                                                                                                                                                                     
+---------- -------------------- -----                                                                                                                                                                                                                     
+      1111 diyijian                 1                                                                                                                                                                                                                     
+      1001 wangwang                 1                                                                                                                                                                                                                     
+      7369 SMITH                  800                                                                                                                                                                                                                     
+      7499 ALLEN                 1600                                                                                                                                                                                                                     
+      7521 WARD                  1250                                                                                                                                                                                                                     
+      7566 JONES                 2975                                                                                                                                                                                                                     
+      7654 MARTIN                1250                                                                                                                                                                                                                     
+      7698 BLAKE                 2850                                                                                                                                                                                                                     
+      7782 CLARK                 2450                                                                                                                                                                                                                     
+      7788 SCOTT                 3000                                                                                                                                                                                                                     
+      7839 KING                  5000                                                                                                                                                                                                                     
+
+     EMPNO ENAME                  SAL                                                                                                                                                                                                                     
+---------- -------------------- -----                                                                                                                                                                                                                     
+      7844 TURNER                1500                                                                                                                                                                                                                     
+      7876 ADAMS                 1100                                                                                                                                                                                                                     
+      7900 JAMES                  950                                                                                                                                                                                                                     
+      7902 FORD                  3000                                                                                                                                                                                                                     
+      7934 MILLER                1300                                                                                                                                                                                                                     
+
+已选择16行。
+
+已用时间:  00: 00: 00.13
+SQL> select empno,ename,&a from emp;
+输入 a 的值:  deptno
+原值    1: select empno,ename,&a from emp
+新值    1: select empno,ename,deptno from emp
+
+     EMPNO ENAME                    DEPTNO                                                                                                                                                                                                                
+---------- -------------------- ----------                                                                                                                                                                                                                
+      1111 diyijian                     10                                                                                                                                                                                                                
+      1001 wangwang                     10                                                                                                                                                                                                                
+      7369 SMITH                        20                                                                                                                                                                                                                
+      7499 ALLEN                        30                                                                                                                                                                                                                
+      7521 WARD                         30                                                                                                                                                                                                                
+      7566 JONES                        20                                                                                                                                                                                                                
+      7654 MARTIN                       30                                                                                                                                                                                                                
+      7698 BLAKE                        30                                                                                                                                                                                                                
+      7782 CLARK                        10                                                                                                                                                                                                                
+      7788 SCOTT                        20                                                                                                                                                                                                                
+      7839 KING                         10                                                                                                                                                                                                                
+
+     EMPNO ENAME                    DEPTNO                                                                                                                                                                                                                
+---------- -------------------- ----------                                                                                                                                                                                                                
+      7844 TURNER                       30                                                                                                                                                                                                                
+      7876 ADAMS                        20                                                                                                                                                                                                                
+      7900 JAMES                        30                                                                                                                                                                                                                
+      7902 FORD                         20                                                                                                                                                                                                                
+      7934 MILLER                       10                                                                                                                                                                                                                
+
+已选择16行。
+
+已用时间:  00: 00: 00.02
+SQL> select * from &table;
+输入 table 的值:  emp
+原值    1: select * from &table
+新值    1: select * from emp
+
+     EMPNO ENAME                JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                  
+---------- -------------------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                  
+      1111 diyijian                                                              1                    10                                                                                                                                                  
+      1001 wangwang                                                              1                    10                                                                                                                                                  
+      7369 SMITH                CLERK                    7902 17-12月-80       800                    20                                                                                                                                                  
+      7499 ALLEN                SALESMAN                 7698 20-2月 -81      1600        300         30                                                                                                                                                  
+      7521 WARD                 SALESMAN                 7698 22-2月 -81      1250        500         30                                                                                                                                                  
+      7566 JONES                MANAGER                  7839 02-4月 -81      2975                    20                                                                                                                                                  
+      7654 MARTIN               SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                                  
+      7698 BLAKE                MANAGER                  7839 01-5月 -81      2850                    30                                                                                                                                                  
+      7782 CLARK                MANAGER                  7839 09-6月 -81      2450                    10                                                                                                                                                  
+      7788 SCOTT                ANALYST                  7566 19-4月 -87      3000                    20                                                                                                                                                  
+      7839 KING                 PRESIDENT                     17-11月-81      5000                    10                                                                                                                                                  
+
+     EMPNO ENAME                JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                  
+---------- -------------------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                  
+      7844 TURNER               SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                                  
+      7876 ADAMS                CLERK                    7788 23-5月 -87      1100                    20                                                                                                                                                  
+      7900 JAMES                CLERK                    7698 03-12月-81       950                    30                                                                                                                                                  
+      7902 FORD                 ANALYST                  7566 03-12月-81      3000                    20                                                                                                                                                  
+      7934 MILLER               CLERK                    7782 23-1月 -82      1300                    10                                                                                                                                                  
+
+已选择16行。
+
+已用时间:  00: 00: 00.08
+SQL> select * from &table;
+输入 table 的值:  dept
+原值    1: select * from &table
+新值    1: select * from dept
+
+    DEPTNO DNAME                        LOC                                                                                                                                                                                                               
+---------- ---------------------------- --------------------------                                                                                                                                                                                        
+        10 ACCOUNTING                   NEW YORK                                                                                                                                                                                                          
+        20 RESEARCH                     DALLAS                                                                                                                                                                                                            
+        30 SALES                        CHICAGO                                                                                                                                                                                                           
+        40 OPERATIONS                   BOSTON                                                                                                                                                                                                            
+
+已用时间:  00: 00: 00.03
+SQL> /
+输入 table 的值:  salgrade
+原值    1: select * from &table
+新值    1: select * from salgrade
+
+     GRADE      LOSAL      HISAL                                                                                                                                                                                                                          
+---------- ---------- ----------                                                                                                                                                                                                                          
+         1        700       1200                                                                                                                                                                                                                          
+         2       1201       1400                                                                                                                                                                                                                          
+         3       1401       2000                                                                                                                                                                                                                          
+         4       2001       3000                                                                                                                                                                                                                          
+         5       3001       9999                                                                                                                                                                                                                          
+
+
+SQL> rollback
+  2  ;
+
+回退已完成。
+
+
+SQL> select * from emp;
+
+     EMPNO ENAME                JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                  
+---------- -------------------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                  
+      7369 SMITH                CLERK                    7902 17-12月-80       800                    20                                                                                                                                                  
+      7499 ALLEN                SALESMAN                 7698 20-2月 -81      1600        300         30                                                                                                                                                  
+      7521 WARD                 SALESMAN                 7698 22-2月 -81      1250        500         30                                                                                                                                                  
+      7566 JONES                MANAGER                  7839 02-4月 -81      2975                    20                                                                                                                                                  
+      7654 MARTIN               SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                                  
+      7698 BLAKE                MANAGER                  7839 01-5月 -81      2850                    30                                                                                                                                                  
+      7782 CLARK                MANAGER                  7839 09-6月 -81      2450                    10                                                                                                                                                  
+      7788 SCOTT                ANALYST                  7566 19-4月 -87      3000                    20                                                                                                                                                  
+      7839 KING                 PRESIDENT                     17-11月-81      5000                    10                                                                                                                                                  
+      7844 TURNER               SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                                  
+      7876 ADAMS                CLERK                    7788 23-5月 -87      1100                    20                                                                                                                                                  
+
+     EMPNO ENAME                JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                  
+---------- -------------------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                  
+      7900 JAMES                CLERK                    7698 03-12月-81       950                    30                                                                                                                                                  
+      7902 FORD                 ANALYST                  7566 03-12月-81      3000                    20                                                                                                                                                  
+      7934 MILLER               CLERK                    7782 23-1月 -82      1300                    10                                                                                                                                                  
+
+已选择14行。
+
+已用时间:  00: 00: 00.05
+SQL> create table empcopy as select * from emp where 1=2;
+
+表已创建。
+
+已用时间:  00: 00: 00.01
+SQL> des empcopy
+SP2-0734: 未知的命令开头 "des empcop..." - 忽略了剩余的行。
+SQL> desc empcopy
+ 名称                                                                                                                                            是否为空? 类型
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ EMPNO                                                                                                                                                    NUMBER(4)
+ ENAME                                                                                                                                                    VARCHAR2(10)
+ JOB                                                                                                                                                      VARCHAR2(9)
+ MGR                                                                                                                                                      NUMBER(4)
+ HIREDATE                                                                                                                                                 DATE
+ SAL                                                                                                                                                      NUMBER(7,2)
+ COMM                                                                                                                                                     NUMBER(7,2)
+ DEPTNO                                                                                                                                                   NUMBER(2)
+
+SQL> --快速创建一个表
+SQL> select * from empcopy;
+
+未选定行
+
+
+SQL> --批量插入数据
+SQL> insert into empcopy select * from emp where deptno=30;
+
+已创建6行。
+
+已用时间:  00: 00: 00.01
+SQL> select * from empcopy;
+
+     EMPNO ENAME                JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                  
+---------- -------------------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                  
+      7499 ALLEN                SALESMAN                 7698 20-2月 -81      1600        300         30                                                                                                                                                  
+      7521 WARD                 SALESMAN                 7698 22-2月 -81      1250        500         30                                                                                                                                                  
+      7654 MARTIN               SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                                  
+      7698 BLAKE                MANAGER                  7839 01-5月 -81      2850                    30                                                                                                                                                  
+      7844 TURNER               SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                                  
+      7900 JAMES                CLERK                    7698 03-12月-81       950                    30                                                                                                                                                  
+
+已选择6行。
+
+
+SQL> host cls
+
+SQL> /*
+SQL> 删除数据  delete truncate 都是删除表中的数据
+SQL> delete是一条一条的删,truncate 重建表,将原先的表删掉再 按照创建方式再来一次
+SQL> 
+SQL> delete是dml操作,truncate是ddl操作,dml可以回滚,ddl不行
+SQL> delete不会释放空间,truncat 可以释放空间
+SQL> delete可以闪回 flashback truncate不可以
+SQL> delete会产生碎片,truncate不会
+SQL> */
+SQL> --关闭操作显示
+SQL> set feedback off
+SQL> @D:\oracle\第二天\testdelete.sql
+已用时间:  00: 00: 00.02
+SQL> spool off

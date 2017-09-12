@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qx.mapper.CertifrecordMapper" >
+  <!--
+  	注意,我们这个语句的作用是为了查看用户的认证状态,如果用户审核失败过,又提交了,查到的结果是什么?
+  	会查到多条数据,但是代码中用单个对象接收的
+  	问题2:如果用集合接收,那么到底用哪个的值?取和这个用户相关的数据中主键最大的那个,因为那个是最新的,前提条件,要控制插入的bug问题
+    -->
+  <select id="selectByUid" parameterType="integer" resultType="com.qx.pojo.Certifrecord">
+  	select * from certifrecord where uid =#{uid}
+  </select>
+   
+   <!-- 注意,可能会出现的bug,如果已经认证成功,但是因为某些原因,导致页面上面的认证显示错误,用户继续点击认证,重复提交 -->
+  <insert id="insertCertifrecord" parameterType="com.qx.pojo.Certifrecord">
+  	<selectKey keyProperty="crid" order="AFTER" resultType="integer">
+  		select LAST_INSERT_ID();
+  	</selectKey>
+  	insert into certifrecord (uid,cruploaddate,crpassstatus,crimg,crtype,crrealname,cridnumber) values(#{uid},#{cruploaddate},#{crpassstatus},#{crimg},#{crtype},#{crrealname},#{cridnumber})
+  </insert>
+  
+  <select id="findAllCertifrecord" resultType="com.qx.pojo.Certifrecord">
+  		select * from certifrecord
+  </select>
+  <update id="updateStatusByCrid" parameterType="com.qx.pojo.Certifrecord">
+  		update certifrecord set crpassdate = #{crpassdate} ,crpassstatus=#{crpassstatus},crauditor=#{crauditor} where crid =#{crid} and crpassstatus='0'
+  </update>
+</mapper>

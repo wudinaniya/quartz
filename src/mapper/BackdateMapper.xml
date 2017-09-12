@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qx.mapper.BackdateMapper" >
+  <insert id="insertBackDate" parameterType="com.qx.pojo.Backdate">
+  	insert into backdate (bid,backDate,backstate,currentnper) values(#{bid},#{backDate},#{backstate},#{currentnper})
+  </insert>
+  <select id="getBackdateByBidAndState" resultType="java.util.Date">
+	  select backDate from backdate where bid =#{bid} and backstate=#{state}
+  </select>
+  <select id="getBackDateAndStateByBid" resultType="com.qx.pojo.Backdate">
+  	
+   select backDate,backstate,currentnper from backdate where bid =#{bid}
+  
+  </select>
+</mapper>

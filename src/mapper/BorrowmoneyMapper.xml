@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qx.mapper.BorrowmoneyMapper">
+	<insert id="addBorrowMoney" parameterType="com.qx.pojo.Borrowmoney">
+		insert into borrowmoney (uid,company,uname,phonenumber,money,type,beizhu1,beizhu2,arean,borrowdate)
+		values (#{uid},#{company},#{uname},#{phonenumber},#{money},#{type},#{beizhu1},#{beizhu2},#{arean},#{borrowdate})
+	</insert>
+	
+	<select id="findBorrowListByPage" resultType="com.qx.pojo.Borrowmoney">
+  		select * from borrowmoney
+  	</select>
+  	
+  
+  <update id="updateRenzhengInfo" parameterType="com.qx.pojo.Borrowmoney">
+  		UPDATE borrowmoney set rzifid=#{rzifid},issue=#{issue},borrowtimelimit=#{borrowtimelimit},borrowdate=#{borrowdate}
+  		,borrowtype=#{borrowtype},brate=#{brate},psastype=#{psastype},passDate=#{passDate} where bid=#{bid} and psastype='0'
+  </update>
+  
+  <select id="getAllBorrow" resultType="com.qx.pojo.MainAndlistDataPojo">
+  	SELECT b.bid,b.uname,b.brate,b.passDate,b.borrowdate,b.borrowtimelimit,p.porchased,p.total FROM borrowmoney b , porchased p WHERE b.bid=p.bid
+  </select>
+  <select id="findBorrowMoneyByBId" parameterType="integer" resultType="com.qx.pojo.Borrowmoney">
+  
+  	select * from borrowmoney where bid =#{bid}
+  </select>
+  
+  <select id="findBrateByBid" parameterType="integer" resultType="double">
+  
+  	select brate from borrowmoney where bid =#{bid}
+  
+  </select>
+</mapper>

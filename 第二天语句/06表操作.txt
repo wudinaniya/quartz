@@ -1,0 +1,583 @@
+SQL> create table mingzi (
+  2  		id number,
+  3  		name varchar(20),
+  4  		hiredate date default sysdate);
+
+表已创建。
+
+已用时间:  00: 00: 00.01
+SQL> desc mingzi
+ 名称                                                                                                                                            是否为空? 类型
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ ID                                                                                                                                                       NUMBER
+ NAME                                                                                                                                                     VARCHAR2(20)
+ HIREDATE                                                                                                                                                 DATE
+
+SQL> insert into mingzi(id,name) values(1,'wangguoying');
+
+已创建 1 行。
+
+已用时间:  00: 00: 00.01
+SQL> select * from mingzi;
+
+        ID NAME                                     HIREDATE                                                                                                                                                                                              
+---------- ---------------------------------------- --------------                                                                                                                                                                                        
+         1 wangguoying                              01-8月 -17                                                                                                                                                                                            
+
+已选择 1 行。
+
+已用时间:  00: 00: 00.00
+SQL> --伪列 rowid
+SQL> 
+SQL> select rowid,id,name from mingzil
+  2  ;
+select rowid,id,name from mingzil
+                          *
+第 1 行出现错误: 
+ORA-00942: 表或视图不存在 
+
+
+已用时间:  00: 00: 00.00
+SQL> select rowid,id,name from mingzi;
+
+ROWID                      ID NAME                                                                                                                                                                                                                        
+------------------ ---------- ----------------------------------------                                                                                                                                                                                    
+AAAR7nAAEAAAADbAAA          1 wangguoying                                                                                                                                                                                                                 
+
+已选择 1 行。
+
+已用时间:  00: 00: 00.00
+SQL> select rowid,empno,ename from emp;
+
+ROWID                   EMPNO ENAME                                                                                                                                                                                                                       
+------------------ ---------- --------------------                                                                                                                                                                                                        
+AAAR3sAAEAAAACXAAA       7369 SMITH                                                                                                                                                                                                                       
+AAAR3sAAEAAAACXAAB       7499 ALLEN                                                                                                                                                                                                                       
+AAAR3sAAEAAAACXAAC       7521 WARD                                                                                                                                                                                                                        
+AAAR3sAAEAAAACXAAD       7566 JONES                                                                                                                                                                                                                       
+AAAR3sAAEAAAACXAAE       7654 MARTIN                                                                                                                                                                                                                      
+AAAR3sAAEAAAACXAAF       7698 BLAKE                                                                                                                                                                                                                       
+AAAR3sAAEAAAACXAAG       7782 CLARK                                                                                                                                                                                                                       
+AAAR3sAAEAAAACXAAH       7788 SCOTT                                                                                                                                                                                                                       
+AAAR3sAAEAAAACXAAI       7839 KING                                                                                                                                                                                                                        
+AAAR3sAAEAAAACXAAJ       7844 TURNER                                                                                                                                                                                                                      
+AAAR3sAAEAAAACXAAK       7876 ADAMS                                                                                                                                                                                                                       
+
+ROWID                   EMPNO ENAME                                                                                                                                                                                                                       
+------------------ ---------- --------------------                                                                                                                                                                                                        
+AAAR3sAAEAAAACXAAL       7900 JAMES                                                                                                                                                                                                                       
+AAAR3sAAEAAAACXAAM       7902 FORD                                                                                                                                                                                                                        
+AAAR3sAAEAAAACXAAN       7934 MILLER                                                                                                                                                                                                                      
+
+已选择14行。
+
+已用时间:  00: 00: 00.02
+SQL> --rowid 行地址
+SQL> select * from emp where rowid='AAAR3sAAEAAAACXAAB';
+
+     EMPNO ENAME                JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                  
+---------- -------------------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                  
+      7499 ALLEN                SALESMAN                 7698 20-2月 -81      1600        300         30                                                                                                                                                  
+
+已选择 1 行。
+
+已用时间:  00: 00: 00.00
+SQL> create table empcopy1 as select * from emp where deptno =20;
+
+表已创建。
+
+已用时间:  00: 00: 00.01
+SQL> select * from empcopy1;
+
+     EMPNO ENAME                JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                  
+---------- -------------------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                                  
+      7369 SMITH                CLERK                    7902 17-12月-80       800                    20                                                                                                                                                  
+      7566 JONES                MANAGER                  7839 02-4月 -81      2975                    20                                                                                                                                                  
+      7788 SCOTT                ANALYST                  7566 19-4月 -87      3000                    20                                                                                                                                                  
+      7876 ADAMS                CLERK                    7788 23-5月 -87      1100                    20                                                                                                                                                  
+      7902 FORD                 ANALYST                  7566 03-12月-81      3000                    20                                                                                                                                                  
+
+已选择5行。
+
+已用时间:  00: 00: 00.02
+SQL> create table emp1 as select e.empno,e.ename,e.sal,e.sal*12 nianxin,d.dname from emp e, dept d where e.deptno=d.deptno;
+
+表已创建。
+
+已用时间:  00: 00: 00.01
+SQL> desc em1;
+ERROR:
+ORA-04043: 对象 em1 不存在 
+
+
+SQL> desc emp1;
+ 名称                                                                                                                                            是否为空? 类型
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ EMPNO                                                                                                                                                    NUMBER(4)
+ ENAME                                                                                                                                                    VARCHAR2(10)
+ SAL                                                                                                                                                      NUMBER(7,2)
+ NIANXIN                                                                                                                                                  NUMBER
+ DNAME                                                                                                                                                    VARCHAR2(14)
+
+SQL> select * from emp1;
+
+     EMPNO ENAME                  SAL    NIANXIN DNAME                                                                                                                                                                                                    
+---------- -------------------- ----- ---------- ----------------------------                                                                                                                                                                             
+      7782 CLARK                 2450      29400 ACCOUNTING                                                                                                                                                                                               
+      7839 KING                  5000      60000 ACCOUNTING                                                                                                                                                                                               
+      7934 MILLER                1300      15600 ACCOUNTING                                                                                                                                                                                               
+      7566 JONES                 2975      35700 RESEARCH                                                                                                                                                                                                 
+      7902 FORD                  3000      36000 RESEARCH                                                                                                                                                                                                 
+      7876 ADAMS                 1100      13200 RESEARCH                                                                                                                                                                                                 
+      7369 SMITH                  800       9600 RESEARCH                                                                                                                                                                                                 
+      7788 SCOTT                 3000      36000 RESEARCH                                                                                                                                                                                                 
+      7521 WARD                  1250      15000 SALES                                                                                                                                                                                                    
+      7844 TURNER                1500      18000 SALES                                                                                                                                                                                                    
+      7499 ALLEN                 1600      19200 SALES                                                                                                                                                                                                    
+
+     EMPNO ENAME                  SAL    NIANXIN DNAME                                                                                                                                                                                                    
+---------- -------------------- ----- ---------- ----------------------------                                                                                                                                                                             
+      7900 JAMES                  950      11400 SALES                                                                                                                                                                                                    
+      7698 BLAKE                 2850      34200 SALES                                                                                                                                                                                                    
+      7654 MARTIN                1250      15000 SALES                                                                                                                                                                                                    
+
+已选择14行。
+
+已用时间:  00: 00: 00.05
+SQL> host cls
+
+SQL> --修改表 添加修改删除重命名列,重命名表
+SQL> alter table emp1 add abc varchar2(20);
+
+表已更改。
+
+已用时间:  00: 00: 00.02
+SQL> desc emp1;
+ 名称                                                                                                                                            是否为空? 类型
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ EMPNO                                                                                                                                                    NUMBER(4)
+ ENAME                                                                                                                                                    VARCHAR2(10)
+ SAL                                                                                                                                                      NUMBER(7,2)
+ NIANXIN                                                                                                                                                  NUMBER
+ DNAME                                                                                                                                                    VARCHAR2(14)
+ ABC                                                                                                                                                      VARCHAR2(20)
+
+SQL> alter table emp1 modify abc varchar(10);
+
+表已更改。
+
+已用时间:  00: 00: 00.02
+SQL> desc emp1;
+ 名称                                                                                                                                            是否为空? 类型
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ EMPNO                                                                                                                                                    NUMBER(4)
+ ENAME                                                                                                                                                    VARCHAR2(10)
+ SAL                                                                                                                                                      NUMBER(7,2)
+ NIANXIN                                                                                                                                                  NUMBER
+ DNAME                                                                                                                                                    VARCHAR2(14)
+ ABC                                                                                                                                                      VARCHAR2(10)
+
+SQL> --删除列
+SQL> alter table  emp1 drop column abc;
+
+表已更改。
+
+已用时间:  00: 00: 00.05
+SQL> desc emp1;
+ 名称                                                                                                                                            是否为空? 类型
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ EMPNO                                                                                                                                                    NUMBER(4)
+ ENAME                                                                                                                                                    VARCHAR2(10)
+ SAL                                                                                                                                                      NUMBER(7,2)
+ NIANXIN                                                                                                                                                  NUMBER
+ DNAME                                                                                                                                                    VARCHAR2(14)
+
+SQL> alter table emp1 rename column dname to dname1111;
+
+表已更改。
+
+已用时间:  00: 00: 00.00
+SQL> desc emp1;
+ 名称                                                                                                                                            是否为空? 类型
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ EMPNO                                                                                                                                                    NUMBER(4)
+ ENAME                                                                                                                                                    VARCHAR2(10)
+ SAL                                                                                                                                                      NUMBER(7,2)
+ NIANXIN                                                                                                                                                  NUMBER
+ DNAME1111                                                                                                                                                VARCHAR2(14)
+
+SQL> --重命名表
+SQL> rename emp1 to emp2;
+
+表已重命名。
+
+已用时间:  00: 00: 00.01
+SQL> desc emp1;
+ERROR:
+ORA-04043: 对象 emp1 不存在 
+
+
+SQL> desc emp2;
+ 名称                                                                                                                                            是否为空? 类型
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ EMPNO                                                                                                                                                    NUMBER(4)
+ ENAME                                                                                                                                                    VARCHAR2(10)
+ SAL                                                                                                                                                      NUMBER(7,2)
+ NIANXIN                                                                                                                                                  NUMBER
+ DNAME1111                                                                                                                                                VARCHAR2(14)
+
+SQL> drop table emp2;
+
+表已删除。
+
+已用时间:  00: 00: 00.01
+SQL> select * from tab;
+
+TNAME                                                        TABTYPE         CLUSTERID                                                                                                                                                                    
+------------------------------------------------------------ -------------- ----------                                                                                                                                                                    
+BIN$bBI/beykSRKp8hMIQlVuDg==$0                               TABLE                                                                                                                                                                                        
+BIN$mOIrNeyXTje5ZXMTpb1cGw==$0                               TABLE                                                                                                                                                                                        
+BIN$xoMYHekfQvWCiyk2VrbKBw==$0                               TABLE                                                                                                                                                                                        
+BONUS                                                        TABLE                                                                                                                                                                                        
+DEPT                                                         TABLE                                                                                                                                                                                        
+EMP                                                          TABLE                                                                                                                                                                                        
+EMPCOPY                                                      TABLE                                                                                                                                                                                        
+EMPCOPY1                                                     TABLE                                                                                                                                                                                        
+MINGZI                                                       TABLE                                                                                                                                                                                        
+SALGRADE                                                     TABLE                                                                                                                                                                                        
+TESTDELETE                                                   TABLE                                                                                                                                                                                        
+
+TNAME                                                        TABTYPE         CLUSTERID                                                                                                                                                                    
+------------------------------------------------------------ -------------- ----------                                                                                                                                                                    
+TESTSAVEPOINT                                                TABLE                                                                                                                                                                                        
+
+已选择12行。
+
+已用时间:  00: 00: 00.06
+SQL> drop table empcopy;
+
+表已删除。
+
+已用时间:  00: 00: 00.01
+SQL> select * from tab;
+
+TNAME                                                        TABTYPE         CLUSTERID                                                                                                                                                                    
+------------------------------------------------------------ -------------- ----------                                                                                                                                                                    
+BIN$bBI/beykSRKp8hMIQlVuDg==$0                               TABLE                                                                                                                                                                                        
+BIN$mOIrNeyXTje5ZXMTpb1cGw==$0                               TABLE                                                                                                                                                                                        
+BIN$rRSnoH8xSXKVlFAXSw0xUA==$0                               TABLE                                                                                                                                                                                        
+BIN$xoMYHekfQvWCiyk2VrbKBw==$0                               TABLE                                                                                                                                                                                        
+BONUS                                                        TABLE                                                                                                                                                                                        
+DEPT                                                         TABLE                                                                                                                                                                                        
+EMP                                                          TABLE                                                                                                                                                                                        
+EMPCOPY1                                                     TABLE                                                                                                                                                                                        
+MINGZI                                                       TABLE                                                                                                                                                                                        
+SALGRADE                                                     TABLE                                                                                                                                                                                        
+TESTDELETE                                                   TABLE                                                                                                                                                                                        
+
+TNAME                                                        TABTYPE         CLUSTERID                                                                                                                                                                    
+------------------------------------------------------------ -------------- ----------                                                                                                                                                                    
+TESTSAVEPOINT                                                TABLE                                                                                                                                                                                        
+
+已选择12行。
+
+已用时间:  00: 00: 00.08
+SQL> drop table empcopy1;
+
+表已删除。
+
+已用时间:  00: 00: 00.01
+SQL> select * from tab;
+
+TNAME                                                        TABTYPE         CLUSTERID                                                                                                                                                                    
+------------------------------------------------------------ -------------- ----------                                                                                                                                                                    
+BIN$PU/RIw+PSJWGbhljy74uig==$0                               TABLE                                                                                                                                                                                        
+BIN$bBI/beykSRKp8hMIQlVuDg==$0                               TABLE                                                                                                                                                                                        
+BIN$mOIrNeyXTje5ZXMTpb1cGw==$0                               TABLE                                                                                                                                                                                        
+BIN$rRSnoH8xSXKVlFAXSw0xUA==$0                               TABLE                                                                                                                                                                                        
+BIN$xoMYHekfQvWCiyk2VrbKBw==$0                               TABLE                                                                                                                                                                                        
+BONUS                                                        TABLE                                                                                                                                                                                        
+DEPT                                                         TABLE                                                                                                                                                                                        
+EMP                                                          TABLE                                                                                                                                                                                        
+MINGZI                                                       TABLE                                                                                                                                                                                        
+SALGRADE                                                     TABLE                                                                                                                                                                                        
+TESTDELETE                                                   TABLE                                                                                                                                                                                        
+
+TNAME                                                        TABTYPE         CLUSTERID                                                                                                                                                                    
+------------------------------------------------------------ -------------- ----------                                                                                                                                                                    
+TESTSAVEPOINT                                                TABLE                                                                                                                                                                                        
+
+已选择12行。
+
+已用时间:  00: 00: 00.06
+SQL> --oracle中回收站
+SQL> show recyclebin;
+ORIGINAL NAME    RECYCLEBIN NAME                OBJECT TYPE  DROP TIME                                                                                                                                                                                    
+---------------- ------------------------------ ------------ -------------------                                                                                                                                                                          
+EMP2             BIN$bBI/beykSRKp8hMIQlVuDg==$0 TABLE        2017-08-01:15:10:36                                                                                                                                                                          
+EMPCOPY          BIN$rRSnoH8xSXKVlFAXSw0xUA==$0 TABLE        2017-08-01:15:11:10                                                                                                                                                                          
+EMPCOPY1         BIN$PU/RIw+PSJWGbhljy74uig==$0 TABLE        2017-08-01:15:11:36                                                                                                                                                                          
+TESTDELETE       BIN$mOIrNeyXTje5ZXMTpb1cGw==$0 TABLE        2017-08-01:14:22:34                                                                                                                                                                          
+TESTDELETE       BIN$xoMYHekfQvWCiyk2VrbKBw==$0 TABLE        2017-08-01:14:21:17                                                                                                                                                                          
+SQL> purge recyclebin;
+
+回收站已清空。
+
+已用时间:  00: 00: 00.06
+SQL> show recyclebin;
+SQL> select * from tab;
+
+TNAME                                                        TABTYPE         CLUSTERID                                                                                                                                                                    
+------------------------------------------------------------ -------------- ----------                                                                                                                                                                    
+BONUS                                                        TABLE                                                                                                                                                                                        
+DEPT                                                         TABLE                                                                                                                                                                                        
+EMP                                                          TABLE                                                                                                                                                                                        
+MINGZI                                                       TABLE                                                                                                                                                                                        
+SALGRADE                                                     TABLE                                                                                                                                                                                        
+TESTDELETE                                                   TABLE                                                                                                                                                                                        
+TESTSAVEPOINT                                                TABLE                                                                                                                                                                                        
+
+已选择7行。
+
+已用时间:  00: 00: 00.00
+SQL> drop table mingzi;
+
+表已删除。
+
+已用时间:  00: 00: 00.01
+SQL> select * from tab;
+
+TNAME                                                        TABTYPE         CLUSTERID                                                                                                                                                                    
+------------------------------------------------------------ -------------- ----------                                                                                                                                                                    
+BIN$sjRWspMVQc+GYpc4woUOJQ==$0                               TABLE                                                                                                                                                                                        
+BONUS                                                        TABLE                                                                                                                                                                                        
+DEPT                                                         TABLE                                                                                                                                                                                        
+EMP                                                          TABLE                                                                                                                                                                                        
+SALGRADE                                                     TABLE                                                                                                                                                                                        
+TESTDELETE                                                   TABLE                                                                                                                                                                                        
+TESTSAVEPOINT                                                TABLE                                                                                                                                                                                        
+
+已选择7行。
+
+已用时间:  00: 00: 00.01
+SQL> show recyclerbin;
+SP2-0735: 未知的 SHOW 选项开头 "recyclerbi..."
+SQL> show recyclebin;
+ORIGINAL NAME    RECYCLEBIN NAME                OBJECT TYPE  DROP TIME                                                                                                                                                                                    
+---------------- ------------------------------ ------------ -------------------                                                                                                                                                                          
+MINGZI           BIN$sjRWspMVQc+GYpc4woUOJQ==$0 TABLE        2017-08-01:15:13:41                                                                                                                                                                          
+SQL> select * from BIN$sjRWspMVQc+GYpc4woUOJQ==$0;
+select * from BIN$sjRWspMVQc+GYpc4woUOJQ==$0
+                            *
+第 1 行出现错误: 
+ORA-00933: SQL 命令未正确结束 
+
+
+已用时间:  00: 00: 00.01
+SQL> flashback table mingzi to before drop;
+
+闪回完成。
+
+已用时间:  00: 00: 00.01
+SQL> select * from tab;
+
+TNAME                                                        TABTYPE         CLUSTERID                                                                                                                                                                    
+------------------------------------------------------------ -------------- ----------                                                                                                                                                                    
+BONUS                                                        TABLE                                                                                                                                                                                        
+DEPT                                                         TABLE                                                                                                                                                                                        
+EMP                                                          TABLE                                                                                                                                                                                        
+MINGZI                                                       TABLE                                                                                                                                                                                        
+SALGRADE                                                     TABLE                                                                                                                                                                                        
+TESTDELETE                                                   TABLE                                                                                                                                                                                        
+TESTSAVEPOINT                                                TABLE                                                                                                                                                                                        
+
+已选择7行。
+
+已用时间:  00: 00: 00.00
+SQL> show recyclebin;
+SQL> drop table mignzi;
+drop table mignzi
+           *
+第 1 行出现错误: 
+ORA-00942: 表或视图不存在 
+
+
+已用时间:  00: 00: 00.00
+SQL> drop table mingzi;
+
+表已删除。
+
+已用时间:  00: 00: 00.01
+SQL> create table mingzi(id number);
+
+表已创建。
+
+已用时间:  00: 00: 00.01
+SQL> select * from tab;
+
+TNAME                                                        TABTYPE         CLUSTERID                                                                                                                                                                    
+------------------------------------------------------------ -------------- ----------                                                                                                                                                                    
+BIN$cdawX/UpTsSp8kfrbpDuEA==$0                               TABLE                                                                                                                                                                                        
+BONUS                                                        TABLE                                                                                                                                                                                        
+DEPT                                                         TABLE                                                                                                                                                                                        
+EMP                                                          TABLE                                                                                                                                                                                        
+MINGZI                                                       TABLE                                                                                                                                                                                        
+SALGRADE                                                     TABLE                                                                                                                                                                                        
+TESTDELETE                                                   TABLE                                                                                                                                                                                        
+TESTSAVEPOINT                                                TABLE                                                                                                                                                                                        
+
+已选择8行。
+
+已用时间:  00: 00: 00.00
+SQL> show recyclebin;
+ORIGINAL NAME    RECYCLEBIN NAME                OBJECT TYPE  DROP TIME                                                                                                                                                                                    
+---------------- ------------------------------ ------------ -------------------                                                                                                                                                                          
+MINGZI           BIN$cdawX/UpTsSp8kfrbpDuEA==$0 TABLE        2017-08-01:15:16:41                                                                                                                                                                          
+SQL> drop table mingzi;
+
+表已删除。
+
+已用时间:  00: 00: 00.01
+SQL> show recyclebin
+ORIGINAL NAME    RECYCLEBIN NAME                OBJECT TYPE  DROP TIME                                                                                                                                                                                    
+---------------- ------------------------------ ------------ -------------------                                                                                                                                                                          
+MINGZI           BIN$qedR1qNtRsuDpWgQe2W6+A==$0 TABLE        2017-08-01:15:17:21                                                                                                                                                                          
+MINGZI           BIN$cdawX/UpTsSp8kfrbpDuEA==$0 TABLE        2017-08-01:15:16:41                                                                                                                                                                          
+SQL> flashback table mingzi to before drop;
+
+闪回完成。
+
+已用时间:  00: 00: 00.01
+SQL> show recyclebin;
+ORIGINAL NAME    RECYCLEBIN NAME                OBJECT TYPE  DROP TIME                                                                                                                                                                                    
+---------------- ------------------------------ ------------ -------------------                                                                                                                                                                          
+MINGZI           BIN$cdawX/UpTsSp8kfrbpDuEA==$0 TABLE        2017-08-01:15:16:41                                                                                                                                                                          
+SQL> flashback table mingzi to before drop;
+flashback table mingzi to before drop
+*
+第 1 行出现错误: 
+ORA-38312: 原始名称已被现有对象使用 
+
+
+已用时间:  00: 00: 00.01
+SQL> flashback table mingzi to before drop rename to mingzi_abc;
+
+闪回完成。
+
+已用时间:  00: 00: 00.01
+SQL> select * from tab;
+
+TNAME                                                        TABTYPE         CLUSTERID                                                                                                                                                                    
+------------------------------------------------------------ -------------- ----------                                                                                                                                                                    
+BONUS                                                        TABLE                                                                                                                                                                                        
+DEPT                                                         TABLE                                                                                                                                                                                        
+EMP                                                          TABLE                                                                                                                                                                                        
+MINGZI                                                       TABLE                                                                                                                                                                                        
+MINGZI_ABC                                                   TABLE                                                                                                                                                                                        
+SALGRADE                                                     TABLE                                                                                                                                                                                        
+TESTDELETE                                                   TABLE                                                                                                                                                                                        
+TESTSAVEPOINT                                                TABLE                                                                                                                                                                                        
+
+已选择8行。
+
+已用时间:  00: 00: 00.02
+SQL> --严重注意,所有的sys管理用没有回收站
+SQL> create table()
+  2  
+SQL> 
+SQL> create table xiaojian (id number,gender char(2) check (gender in ('男','女')) );
+
+表已创建。
+
+已用时间:  00: 00: 00.02
+SQL> desc xiaojian;
+ 名称                                                                                                                                            是否为空? 类型
+ ----------------------------------------------------------------------------------------------------------------------------------------------- -------- ------------------------------------------------------------------------------------------------
+ ID                                                                                                                                                       NUMBER
+ GENDER                                                                                                                                                   CHAR(2)
+
+SQL> insert into xiaojian (1,'ding');
+insert into xiaojian (1,'ding')
+                      *
+第 1 行出现错误: 
+ORA-00928: 缺失 SELECT 关键字 
+
+
+已用时间:  00: 00: 00.00
+SQL> insert into xiaojian values (1,'ding');
+insert into xiaojian values (1,'ding')
+                               *
+第 1 行出现错误: 
+ORA-12899: 列 "SCOTT"."XIAOJIAN"."GENDER" 的值太大 (实际值: 4, 最大值: 2) 
+
+
+已用时间:  00: 00: 00.02
+SQL> insert into xiaojian values (1,'dh');
+insert into xiaojian values (1,'dh')
+*
+第 1 行出现错误: 
+ORA-02290: 违反检查约束条件 (SCOTT.SYS_C0010815) 
+
+
+已用时间:  00: 00: 00.04
+SQL> insert into xiaojian values (1,'男');
+insert into xiaojian values (1,'男')
+                               *
+第 1 行出现错误: 
+ORA-12899: 列 "SCOTT"."XIAOJIAN"."GENDER" 的值太大 (实际值: 3, 最大值: 2) 
+
+
+已用时间:  00: 00: 00.01
+SQL> alter table xiaojian modify  gender char(3);
+
+表已更改。
+
+已用时间:  00: 00: 00.01
+SQL> insert into xiaojian values (1,'男');
+
+已创建 1 行。
+
+已用时间:  00: 00: 00.00
+SQL> create table student(id number constraint student_pk primary key,name varchar(20) constraint name_not_null not null );
+
+表已创建。
+
+已用时间:  00: 00: 00.02
+SQL> insert into student values (1,null)tr;
+insert into student values (1,null)tr
+                                   *
+第 1 行出现错误: 
+ORA-00933: SQL 命令未正确结束 
+
+
+已用时间:  00: 00: 00.00
+SQL> insert into student values (1,null);
+insert into student values (1,null)
+                              *
+第 1 行出现错误: 
+ORA-01400: 无法将 NULL 插入 ("SCOTT"."STUDENT"."NAME") 
+
+
+已用时间:  00: 00: 00.01
+SQL> insert into student values (1,'');
+insert into student values (1,'')
+                              *
+第 1 行出现错误: 
+ORA-01400: 无法将 NULL 插入 ("SCOTT"."STUDENT"."NAME") 
+
+
+已用时间:  00: 00: 00.00
+SQL> insert into student values (1,' ');
+
+已创建 1 行。
+
+已用时间:  00: 00: 00.00
+SQL> insert into student values (1,' ');
+insert into student values (1,' ')
+*
+第 1 行出现错误: 
+ORA-00001: 违反唯一约束条件 (SCOTT.STUDENT_PK) 
+
+
+已用时间:  00: 00: 00.01
+SQL> spool off

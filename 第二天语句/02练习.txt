@@ -1,0 +1,289 @@
+SQL> select rownum,empno,ename,sal from emp;
+
+    ROWNUM      EMPNO ENAME                  SAL                                                                                                                                                                                                          
+---------- ---------- -------------------- -----                                                                                                                                                                                                          
+         1       7369 SMITH                  800                                                                                                                                                                                                          
+         2       7499 ALLEN                 1600                                                                                                                                                                                                          
+         3       7521 WARD                  1250                                                                                                                                                                                                          
+         4       7566 JONES                 2975                                                                                                                                                                                                          
+         5       7654 MARTIN                1250                                                                                                                                                                                                          
+         6       7698 BLAKE                 2850                                                                                                                                                                                                          
+         7       7782 CLARK                 2450                                                                                                                                                                                                          
+         8       7788 SCOTT                 3000                                                                                                                                                                                                          
+         9       7839 KING                  5000                                                                                                                                                                                                          
+        10       7844 TURNER                1500                                                                                                                                                                                                          
+        11       7876 ADAMS                 1100                                                                                                                                                                                                          
+
+    ROWNUM      EMPNO ENAME                  SAL                                                                                                                                                                                                          
+---------- ---------- -------------------- -----                                                                                                                                                                                                          
+        12       7900 JAMES                  950                                                                                                                                                                                                          
+        13       7902 FORD                  3000                                                                                                                                                                                                          
+        14       7934 MILLER                1300                                                                                                                                                                                                          
+
+已选择14行。
+
+SQL> select rownum,empno,ename,sal from emp order by sal desc;
+
+    ROWNUM      EMPNO ENAME                  SAL                                                                                                                                                                                                          
+---------- ---------- -------------------- -----                                                                                                                                                                                                          
+         9       7839 KING                  5000                                                                                                                                                                                                          
+        13       7902 FORD                  3000                                                                                                                                                                                                          
+         8       7788 SCOTT                 3000                                                                                                                                                                                                          
+         4       7566 JONES                 2975                                                                                                                                                                                                          
+         6       7698 BLAKE                 2850                                                                                                                                                                                                          
+         7       7782 CLARK                 2450                                                                                                                                                                                                          
+         2       7499 ALLEN                 1600                                                                                                                                                                                                          
+        10       7844 TURNER                1500                                                                                                                                                                                                          
+        14       7934 MILLER                1300                                                                                                                                                                                                          
+         3       7521 WARD                  1250                                                                                                                                                                                                          
+         5       7654 MARTIN                1250                                                                                                                                                                                                          
+
+    ROWNUM      EMPNO ENAME                  SAL                                                                                                                                                                                                          
+---------- ---------- -------------------- -----                                                                                                                                                                                                          
+        11       7876 ADAMS                 1100                                                                                                                                                                                                          
+        12       7900 JAMES                  950                                                                                                                                                                                                          
+         1       7369 SMITH                  800                                                                                                                                                                                                          
+
+已选择14行。
+
+SQL> select rwonum,empno,ename,sal from (select * from emp order by sal desc);
+select rwonum,empno,ename,sal from (select * from emp order by sal desc)
+       *
+第 1 行出现错误: 
+ORA-00904: "RWONUM": 标识符无效 
+
+
+SQL> select rownum,empno,ename,sal from (select * from emp order by sal desc);
+
+    ROWNUM      EMPNO ENAME                  SAL                                                                                                                                                                                                          
+---------- ---------- -------------------- -----                                                                                                                                                                                                          
+         1       7839 KING                  5000                                                                                                                                                                                                          
+         2       7902 FORD                  3000                                                                                                                                                                                                          
+         3       7788 SCOTT                 3000                                                                                                                                                                                                          
+         4       7566 JONES                 2975                                                                                                                                                                                                          
+         5       7698 BLAKE                 2850                                                                                                                                                                                                          
+         6       7782 CLARK                 2450                                                                                                                                                                                                          
+         7       7499 ALLEN                 1600                                                                                                                                                                                                          
+         8       7844 TURNER                1500                                                                                                                                                                                                          
+         9       7934 MILLER                1300                                                                                                                                                                                                          
+        10       7521 WARD                  1250                                                                                                                                                                                                          
+        11       7654 MARTIN                1250                                                                                                                                                                                                          
+
+    ROWNUM      EMPNO ENAME                  SAL                                                                                                                                                                                                          
+---------- ---------- -------------------- -----                                                                                                                                                                                                          
+        12       7876 ADAMS                 1100                                                                                                                                                                                                          
+        13       7900 JAMES                  950                                                                                                                                                                                                          
+        14       7369 SMITH                  800                                                                                                                                                                                                          
+
+已选择14行。
+
+SQL> select rownum,empno,ename,sal from (select * from emp order by sal desc) where rownum<=5;
+
+    ROWNUM      EMPNO ENAME                  SAL                                                                                                                                                                                                          
+---------- ---------- -------------------- -----                                                                                                                                                                                                          
+         1       7839 KING                  5000                                                                                                                                                                                                          
+         2       7788 SCOTT                 3000                                                                                                                                                                                                          
+         3       7902 FORD                  3000                                                                                                                                                                                                          
+         4       7566 JONES                 2975                                                                                                                                                                                                          
+         5       7698 BLAKE                 2850                                                                                                                                                                                                          
+
+SQL> --rownum 伪列,用于标记行号
+SQL> --rownum 只能使用< <=不能使用> >=
+SQL> select rownum,empno,ename,sal from (select * from emp order by sal desc) where rownum >=3;
+
+未选定行
+
+SQL> --rownum永远按照默认顺序排序,无法更改,一旦行号出现后,不论怎么排序,原先是第几行,排序后行号仍然是几
+SQL> --要想排序后行号发变化,那么必须在有行号之前先排序数据
+SQL> --rownum永远从1开始
+SQL> select rownum,e.* from (select * from emp order by sal) e;
+
+    ROWNUM      EMPNO ENAME                JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                       
+---------- ---------- -------------------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                       
+         1       7369 SMITH                CLERK                    7902 17-12月-80       800                    20                                                                                                                                       
+         2       7900 JAMES                CLERK                    7698 03-12月-81       950                    30                                                                                                                                       
+         3       7876 ADAMS                CLERK                    7788 23-5月 -87      1100                    20                                                                                                                                       
+         4       7521 WARD                 SALESMAN                 7698 22-2月 -81      1250        500         30                                                                                                                                       
+         5       7654 MARTIN               SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                       
+         6       7934 MILLER               CLERK                    7782 23-1月 -82      1300                    10                                                                                                                                       
+         7       7844 TURNER               SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                       
+         8       7499 ALLEN                SALESMAN                 7698 20-2月 -81      1600        300         30                                                                                                                                       
+         9       7782 CLARK                MANAGER                  7839 09-6月 -81      2450                    10                                                                                                                                       
+        10       7698 BLAKE                MANAGER                  7839 01-5月 -81      2850                    30                                                                                                                                       
+        11       7566 JONES                MANAGER                  7839 02-4月 -81      2975                    20                                                                                                                                       
+
+    ROWNUM      EMPNO ENAME                JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                       
+---------- ---------- -------------------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                       
+        12       7788 SCOTT                ANALYST                  7566 19-4月 -87      3000                    20                                                                                                                                       
+        13       7902 FORD                 ANALYST                  7566 03-12月-81      3000                    20                                                                                                                                       
+        14       7839 KING                 PRESIDENT                     17-11月-81      5000                    10                                                                                                                                       
+
+已选择14行。
+
+SQL> select rownum,e.* from (select * from emp order by sal) e where rownum<8;
+
+    ROWNUM      EMPNO ENAME                JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                       
+---------- ---------- -------------------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                       
+         1       7369 SMITH                CLERK                    7902 17-12月-80       800                    20                                                                                                                                       
+         2       7900 JAMES                CLERK                    7698 03-12月-81       950                    30                                                                                                                                       
+         3       7876 ADAMS                CLERK                    7788 23-5月 -87      1100                    20                                                                                                                                       
+         4       7521 WARD                 SALESMAN                 7698 22-2月 -81      1250        500         30                                                                                                                                       
+         5       7654 MARTIN               SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                       
+         6       7934 MILLER               CLERK                    7782 23-1月 -82      1300                    10                                                                                                                                       
+         7       7844 TURNER               SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                       
+
+已选择7行。
+
+SQL> select rownum,e.* from (select * from emp order by sal) e where rownum<8 and rownum >4;
+
+未选定行
+
+SQL> select * from (select rownum,e.* from (select * from emp order by sal) e where rownum<8);
+
+    ROWNUM      EMPNO ENAME                JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                       
+---------- ---------- -------------------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                       
+         1       7369 SMITH                CLERK                    7902 17-12月-80       800                    20                                                                                                                                       
+         2       7900 JAMES                CLERK                    7698 03-12月-81       950                    30                                                                                                                                       
+         3       7876 ADAMS                CLERK                    7788 23-5月 -87      1100                    20                                                                                                                                       
+         4       7521 WARD                 SALESMAN                 7698 22-2月 -81      1250        500         30                                                                                                                                       
+         5       7654 MARTIN               SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                       
+         6       7934 MILLER               CLERK                    7782 23-1月 -82      1300                    10                                                                                                                                       
+         7       7844 TURNER               SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                       
+
+已选择7行。
+
+SQL> select * from (select rownum r,e.* from (select * from emp order by sal) e where rownum<8);
+
+         R      EMPNO ENAME                JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                       
+---------- ---------- -------------------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                       
+         1       7369 SMITH                CLERK                    7902 17-12月-80       800                    20                                                                                                                                       
+         2       7900 JAMES                CLERK                    7698 03-12月-81       950                    30                                                                                                                                       
+         3       7876 ADAMS                CLERK                    7788 23-5月 -87      1100                    20                                                                                                                                       
+         4       7521 WARD                 SALESMAN                 7698 22-2月 -81      1250        500         30                                                                                                                                       
+         5       7654 MARTIN               SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                       
+         6       7934 MILLER               CLERK                    7782 23-1月 -82      1300                    10                                                                                                                                       
+         7       7844 TURNER               SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                       
+
+已选择7行。
+
+SQL> select * from (select rownum r,e.* from (select * from emp order by sal) e where rownum<8) where r >4;
+
+         R      EMPNO ENAME                JOB                       MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                       
+---------- ---------- -------------------- ------------------ ---------- -------------- ----- ---------- ----------                                                                                                                                       
+         5       7654 MARTIN               SALESMAN                 7698 28-9月 -81      1250       1400         30                                                                                                                                       
+         6       7934 MILLER               CLERK                    7782 23-1月 -82      1300                    10                                                                                                                                       
+         7       7844 TURNER               SALESMAN                 7698 08-9月 -81      1500          0         30                                                                                                                                       
+
+SQL> --标准表,索引表,临时表
+SQL> --手动创建 ,系统自动创建(查数据的时候 排序的时候)
+SQL> --临时表的特点,当会话或者事务完成后会自动清除数据
+SQL> --手动create global temporary table linshi (id number,name varchar2(20));
+SQL> create global temporary table linshi (id number,name varchar2(20));
+
+表已创建。
+
+SQL> select * from tab;
+
+TNAME                                                        TABTYPE         CLUSTERID                                                                                                                                                                    
+------------------------------------------------------------ -------------- ----------                                                                                                                                                                    
+BONUS                                                        TABLE                                                                                                                                                                                        
+DEPT                                                         TABLE                                                                                                                                                                                        
+EMP                                                          TABLE                                                                                                                                                                                        
+LINSHI                                                       TABLE                                                                                                                                                                                        
+SALGRADE                                                     TABLE                                                                                                                                                                                        
+
+SQL> drop table linshi;
+
+表已删除。
+
+SQL> select * from tab;
+
+TNAME                                                        TABTYPE         CLUSTERID                                                                                                                                                                    
+------------------------------------------------------------ -------------- ----------                                                                                                                                                                    
+BONUS                                                        TABLE                                                                                                                                                                                        
+DEPT                                                         TABLE                                                                                                                                                                                        
+EMP                                                          TABLE                                                                                                                                                                                        
+SALGRADE                                                     TABLE                                                                                                                                                                                        
+
+SQL> create global temporary table linshi (id number,name varchar2(20)) on commit delete rows;
+
+表已创建。
+
+SQL> insert into linshi values(1,'zhangsan');
+
+已创建 1 行。
+
+SQL> select * from linshi;
+
+        ID NAME                                                                                                                                                                                                                                           
+---------- ----------------------------------------                                                                                                                                                                                                       
+         1 zhangsan                                                                                                                                                                                                                                       
+
+SQL> commit;
+
+提交完成。
+
+SQL> select * from linshi;
+
+未选定行
+
+SQL> drop talbe linshil
+  2  drop talbe linshi;
+drop talbe linshil
+     *
+第 1 行出现错误: 
+ORA-00950: 无效 DROP 选项 
+
+
+SQL> drop table linshi;
+
+表已删除。
+
+SQL> --相关子查询,将主查询的结果传递到子查询中
+SQL> 查询员工信息,查询工资比部门平均薪资高的人
+SP2-0734: 未知的命令开头 "查询员工信..." - 忽略了剩余的行。
+SQL> --查询员工信息,查询工资比部门平均薪资高的人
+SQL> select empno,ename,sal from emp e where sal >(select avg(sal) from emp  where deptno  = e.deptno);
+
+     EMPNO ENAME                  SAL                                                                                                                                                                                                                     
+---------- -------------------- -----                                                                                                                                                                                                                     
+      7499 ALLEN                 1600                                                                                                                                                                                                                     
+      7566 JONES                 2975                                                                                                                                                                                                                     
+      7698 BLAKE                 2850                                                                                                                                                                                                                     
+      7788 SCOTT                 3000                                                                                                                                                                                                                     
+      7839 KING                  5000                                                                                                                                                                                                                     
+      7902 FORD                  3000                                                                                                                                                                                                                     
+
+已选择6行。
+
+SQL> select empno,ename,sal from emp e where sal >(select avg(sal) from emp  where deptno  = e.deptno);
+
+     EMPNO ENAME                  SAL                                                                                                                                                                                                                     
+---------- -------------------- -----                                                                                                                                                                                                                     
+      7499 ALLEN                 1600                                                                                                                                                                                                                     
+      7566 JONES                 2975                                                                                                                                                                                                                     
+      7698 BLAKE                 2850                                                                                                                                                                                                                     
+      7788 SCOTT                 3000                                                                                                                                                                                                                     
+      7839 KING                  5000                                                                                                                                                                                                                     
+      7902 FORD                  3000                                                                                                                                                                                                                     
+
+已选择6行。
+
+SQL> ed
+已写入 file afiedt.buf
+
+  1* select empno,ename,sal,(select avg(sal) from emp  where deptno  = e.deptno) from emp e where sal >(select avg(sal) from emp  where deptno  = e.deptno)
+SQL> /
+
+     EMPNO ENAME                  SAL (SELECTAVG(SAL)FROMEMPWHEREDEPTNO=E.DEPTNO)                                                                                                                                                                         
+---------- -------------------- ----- -------------------------------------------                                                                                                                                                                         
+      7499 ALLEN                 1600                                  1566.66667                                                                                                                                                                         
+      7566 JONES                 2975                                        2175                                                                                                                                                                         
+      7698 BLAKE                 2850                                  1566.66667                                                                                                                                                                         
+      7788 SCOTT                 3000                                        2175                                                                                                                                                                         
+      7839 KING                  5000                                  2916.66667                                                                                                                                                                         
+      7902 FORD                  3000                                        2175                                                                                                                                                                         
+
+已选择6行。
+
+SQL> spool off

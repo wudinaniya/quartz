@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qx.mapper.PorchasedMapper" >
+  <select id="findByBid" parameterType="integer" resultType="com.qx.pojo.Porchased">
+  	select * from  porchased
+  </select>
+  <insert id="insertPorchased" parameterType="com.qx.pojo.Porchased">
+  	insert into porchased (porchased,bid,total) values(#{porchased},#{bid},#{total})
+  </insert>
+  <update id="updatePorchasedById" parameterType="com.qx.pojo.Porchased">
+  	update porchased set porchased=#{porchased},version =version+1 where id =#{id} and version =#{version}
+  </update>
+  
+  <select id="findPorchasedByBid" parameterType="integer" resultType="integer" >
+	  select porchased from  porchased where bid =#{bid}
+  </select>
+</mapper>
