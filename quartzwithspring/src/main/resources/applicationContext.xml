@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<context:component-scan base-package="com.qx"></context:component-scan>
+	
+	<!-- quartz在spring中的配置全是各种FactoryBean -->
+	
+	<!-- jobDeail -->
+	<!-- jobdetail原始的方式(不和spring整合时)需要有一个类实现job接口，（和spring整合的话）现在不需要实现，只需要指定好对象和方法即可 -->
+	<bean id="qxjobdetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+	<!-- 指定两个属性，最终调用的方法在哪个类里面 -->
+		<property name="targetObject" ref="qxjobBean"></property>
+		<property name="targetMethod" value="doSomeThing"></property>
+	</bean>
+	
+	<!-- 针对特定类型的jobdetail使用继承自QuartzJobBean的一些子类 -->
+	<bean id="jobDetail1" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.qx.quartz.FirstJobBean"></property>
+		<!-- 将job对象设置为活跃的，以防止被莫名其妙删除 -->
+		<property name="durability" value="true"></property>
+	</bean>
+	
+	<!-- 针对特定类型的jobdetail使用继承自QuartzJobBean的一些子类 -->
+	<bean id="jobDetail2" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.qx.quartz.SecondJobBean"></property>
+		<!-- 将job对象设置为活跃的，以防止被莫名其妙删除 -->
+		<property name="durability" value="true"></property>
+	</bean>
+	
+	
+	<!-- trigger -->
+	<bean id="simpleTriger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<property name="jobDetail" ref="qxjobdetail"></property>
+		<!-- 每次任务触发后延迟多久执行 -->
+		<property name="startDelay" value="2000"></property>
+		<!-- 每隔多久触发一次任务 -->
+		<property name="repeatInterval" value="3000"></property>
+	</bean>
+	
+	<!-- 配置触发器 -->
+	<bean id="cronTrigger1" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail1"></property>
+		<!-- 配置触发的规则 -->
+		<property name="cronExpression" value="0/5 * * ? * *"></property>
+	</bean>
+	
+	<bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail2"></property>
+		<property name="cronExpression" value="0 46 22 ? * *"></property>
+	</bean>
+	
+	
+	<!-- Scheduler  用于调度任务的调度器-->
+	<!-- setJobDetails的参数是个可变长度，因此可以认为是数组,那么配置时就可以使用list标签 ,同理，setTriggers也是-->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="jobDetails">
+			<list>
+				<ref bean="qxjobdetail"/>
+				<ref bean="jobDetail1"/>
+				<ref bean="jobDetail2"/>
+			</list>
+		</property>
+		
+		<property name="triggers">
+			<list>
+				<ref bean="simpleTriger"/>
+				<ref bean="cronTrigger1"/>
+				<ref bean="cronTrigger2"/>
+			</list>
+		</property>
+	</bean>
+</beans>
